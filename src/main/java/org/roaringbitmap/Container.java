@@ -13,6 +13,9 @@ import java.io.Externalizable;
 public abstract class Container implements Iterable<Short>, Cloneable,
         Externalizable {
 
+	// if isNegated is true, we enumerate the bits that are 0
+	private boolean isNegated = false;
+
         /**
          * Add a short to the container. May generate a new container.
          * 
