@@ -17,7 +17,6 @@ import org.junit.Test;
  */
 @SuppressWarnings({ "static-method", "javadoc" })
 public class TestContainer {
-        /*
         @Test
         public void inotTest1() {
                 // Array container, range is complete
@@ -462,5 +461,5 @@ public class TestContainer {
                         c = c.add(s);
                 return c;
         }
-        */
+        
 }
