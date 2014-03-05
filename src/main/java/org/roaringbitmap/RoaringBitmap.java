@@ -10,13 +10,14 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Arrays;
 
 /**
  * RoaringBitmap, a compressed alternative to the BitSet.
  * 
  */
 public final class RoaringBitmap implements Cloneable, Serializable,
-                                            Iterable<Integer>, Externalizable, MinimalCompressedBitset<RoaringBitmap> { 
+                                            Iterable<Integer>, Externalizable, MinimalCompressedBitset { 
 
         /**
          * Create an empty bitmap
@@ -964,33 +965,38 @@ public final class RoaringBitmap implements Cloneable, Serializable,
                 return answer;
         }
 
-        // implement the MinimalCompressedBitset interface
+        // implement the MinimalCompressedBitset interface.  Now requires some annoying runtime costs
+        // that seem totally unneccessary.
+        private Class<? extends RoaringBitmap []> rbArrayClass = (new RoaringBitmap[1]).getClass();
         private static int universeSize = UNSET;
         private static RoaringBitmap invoker = new RoaringBitmap();
         public RoaringBitmap getInvokingObject() { return invoker;}
         public boolean containsOp( final int x) { return contains(x);}
         public void addOp( final int x) { add(x);}
         public void removeOp( final int x) { remove(x);}
-        public RoaringBitmap andOp( final RoaringBitmap ... others) {
+        public RoaringBitmap andOp( final MinimalCompressedBitset ... others) {
                 assert this == invoker;
                 if (others.length == 2)
-                        return RoaringBitmap.and(this, others[0]);
-                else return FastAggregation.and(others);
+                        return RoaringBitmap.and((RoaringBitmap)others[0], (RoaringBitmap) others[1]);
+                else {
+                        RoaringBitmap [] rOthers = Arrays.copyOf(others,others.length, rbArrayClass );  // annoying cost
+                        return FastAggregation.and(rOthers);
+                }
         }
-        public RoaringBitmap orOp( final RoaringBitmap ... others) {
+        public RoaringBitmap orOp( final MinimalCompressedBitset ... others) {
                 assert this == invoker;
                 if (others.length == 2)
-                        return RoaringBitmap.or(this, others[0]);
-                else return FastAggregation.or(others);
+                        return RoaringBitmap.or((RoaringBitmap)others[0], (RoaringBitmap) others[1]);
+                else return FastAggregation.or(Arrays.copyOf(others,others.length, rbArrayClass ));
         }
-        public RoaringBitmap xorOp( final RoaringBitmap ... others) {
+        public RoaringBitmap xorOp( final MinimalCompressedBitset ... others) {
                 assert this == invoker;
                 if (others.length == 2)
-                        return RoaringBitmap.xor(this, others[0]);
-                else return FastAggregation.xor(others);
+                        return RoaringBitmap.xor((RoaringBitmap) others[0], (RoaringBitmap) others[1]);
+                else return FastAggregation.xor(Arrays.copyOf(others,others.length, rbArrayClass ));
         }
-        public RoaringBitmap andNotOp( final RoaringBitmap other) {
-                return RoaringBitmap.andNot(this,other);
+        public RoaringBitmap andNotOp( final MinimalCompressedBitset other) {
+                return RoaringBitmap.andNot(this,(RoaringBitmap)other);
         }
         public RoaringBitmap notOp() {
                 assert universeSize != UNSET;

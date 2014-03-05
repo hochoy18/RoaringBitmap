@@ -14,7 +14,7 @@ import org.junit.Before;
 
 @SuppressWarnings({ "static-method", "javadoc" })
 public class TestDeferredRoaring {
-        DeferredRoaring pos1246, pos1357, pos5678, neg2347, neg1568, neg0123, dummy;
+        MinimalCompressedBitset pos1246, pos1357, pos5678, neg2347, neg1568, neg0123, dummy;
         @Before 
         public void setup() {
                 pos1246 = new DeferredRoaring(false, RoaringBitmap.bitmapOf(1,2,4,6), 10);
@@ -28,7 +28,7 @@ public class TestDeferredRoaring {
 
         
         // equality on contents, array must be sorted
-        boolean contains(DeferredRoaring d, int [] desired) {
+        boolean contains(MinimalCompressedBitset d, int [] desired) {
                 //System.out.println("in contains");
                 if (d.getCardinality() != desired.length) return false;
                 //System.out.println("cardinality "+ d.getCardinality()+ " match");
@@ -237,7 +237,7 @@ public class TestDeferredRoaring {
 
         @Test
         public void testOrOp9() {
-                DeferredRoaring ans = dummy.orOp(neg2347,pos5678, pos1357);
+                MinimalCompressedBitset ans = dummy.orOp(neg2347,pos5678, pos1357);
                 assertTrue( contains(ans, new int [] {0,1,3,5,6,7,8,9}));
         }
 
@@ -301,7 +301,7 @@ public class TestDeferredRoaring {
  
         @Test
         public void testXorOp9() {
-                DeferredRoaring ans = dummy.xorOp(neg2347,pos5678, pos1357);
+                MinimalCompressedBitset ans = dummy.xorOp(neg2347,pos5678, pos1357);
                 assertTrue( contains(ans, new int [] {0,3,5,9}));
         }
 

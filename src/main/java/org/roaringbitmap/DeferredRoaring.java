@@ -20,11 +20,12 @@
 package org.roaringbitmap;
 import java.util.*;
 
-public class DeferredRoaring implements MinimalCompressedBitset<DeferredRoaring> {
+public class DeferredRoaring implements MinimalCompressedBitset {
         private boolean isNegated;
         private int universeSize = UNSET;
         private static final  DeferredRoaring dummyObject = new DeferredRoaring(false,new RoaringBitmap(),UNSET);
         private final RoaringBitmap rb;
+        private Class<? extends DeferredRoaring []> deferredArrayClass = (new DeferredRoaring[1]).getClass(); // grr.
 
         public DeferredRoaring( boolean inv, RoaringBitmap values, int uSize) {
                 isNegated = inv;
@@ -57,7 +58,8 @@ public class DeferredRoaring implements MinimalCompressedBitset<DeferredRoaring>
 
         /** not "in place", the input bitmaps are unaltered */
 
-        public DeferredRoaring andNotOp(final DeferredRoaring  other) {
+        public DeferredRoaring andNotOp(final MinimalCompressedBitset oth) {
+                DeferredRoaring other = (DeferredRoaring) oth;
                 if (!isNegated && !other.isNegated)
                         return new DeferredRoaring(false, RoaringBitmap.andNot(rb, other.rb), universeSize);
                 if (isNegated && other.isNegated)
@@ -85,8 +87,9 @@ public class DeferredRoaring implements MinimalCompressedBitset<DeferredRoaring>
         // they are effectively static methods, which apparently  cannot yet be required in an interface
 
 
-        public DeferredRoaring andOp(final DeferredRoaring ... others) {
+        public DeferredRoaring andOp(final MinimalCompressedBitset ... oths) {
                 assert this == dummyObject;  // else API user is confused
+                DeferredRoaring [] others = Arrays.copyOf(oths, oths.length, deferredArrayClass);  // grr.
                 if (others.length == 2) {
                         if (!others[0].isNegated && !others[1].isNegated)
                                 return new DeferredRoaring(false, RoaringBitmap.and(others[0].rb, others[1].rb), others[0].universeSize);
@@ -120,8 +123,9 @@ public class DeferredRoaring implements MinimalCompressedBitset<DeferredRoaring>
                 return null;  // unreachable
         }
 
-        public DeferredRoaring orOp(final DeferredRoaring ... others) {
+        public DeferredRoaring orOp(final MinimalCompressedBitset ... oths) {
                 assert this == dummyObject;
+                DeferredRoaring [] others = Arrays.copyOf(oths, oths.length, deferredArrayClass);  // grr.
                 if (others.length == 2) {
                         if (!others[0].isNegated && !others[1].isNegated)
                                 return new DeferredRoaring(false, RoaringBitmap.or(others[0].rb, others[1].rb), others[0].universeSize);
@@ -156,8 +160,9 @@ public class DeferredRoaring implements MinimalCompressedBitset<DeferredRoaring>
                 return null; // unreachable
         }
 
-        public DeferredRoaring xorOp(final DeferredRoaring ... others) {
+        public DeferredRoaring xorOp(final MinimalCompressedBitset ... oths) {
                 assert this == dummyObject;
+                DeferredRoaring [] others = Arrays.copyOf(oths, oths.length, deferredArrayClass);  // grr.
                 if (others.length == 2) {
                         return new DeferredRoaring(others[0].isNegated ^ others[1].isNegated, RoaringBitmap.xor(others[0].rb, others[1].rb), others[0].universeSize);
                 }
