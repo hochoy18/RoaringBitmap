@@ -16,7 +16,7 @@ import java.util.Iterator;
  * 
  */
 public final class RoaringBitmap implements Cloneable, Serializable,
-        Iterable<Integer>, Externalizable {
+                                            Iterable<Integer>, Externalizable, MinimalCompressedBitset<RoaringBitmap> { 
 
         /**
          * Create an empty bitmap
@@ -963,6 +963,43 @@ public final class RoaringBitmap implements Cloneable, Serializable,
 
                 return answer;
         }
+
+        // implement the MinimalCompressedBitset interface
+        private static int universeSize = UNSET;
+        private static RoaringBitmap invoker = new RoaringBitmap();
+        public RoaringBitmap getInvokingObject() { return invoker;}
+        public boolean containsOp( final int x) { return contains(x);}
+        public void addOp( final int x) { add(x);}
+        public void removeOp( final int x) { remove(x);}
+        public RoaringBitmap andOp( final RoaringBitmap ... others) {
+                assert this == invoker;
+                if (others.length == 2)
+                        return RoaringBitmap.and(this, others[0]);
+                else return FastAggregation.and(others);
+        }
+        public RoaringBitmap orOp( final RoaringBitmap ... others) {
+                assert this == invoker;
+                if (others.length == 2)
+                        return RoaringBitmap.or(this, others[0]);
+                else return FastAggregation.or(others);
+        }
+        public RoaringBitmap xorOp( final RoaringBitmap ... others) {
+                assert this == invoker;
+                if (others.length == 2)
+                        return RoaringBitmap.xor(this, others[0]);
+                else return FastAggregation.xor(others);
+        }
+        public RoaringBitmap andNotOp( final RoaringBitmap other) {
+                return RoaringBitmap.andNot(this,other);
+        }
+        public RoaringBitmap notOp() {
+                assert universeSize != UNSET;
+                return RoaringBitmap.flip(this, 0, universeSize);
+        }
+        public void setUniverseSize( final int uSize) {
+                universeSize = uSize;
+        }
+
 
         protected RoaringArray highlowcontainer = null;
 

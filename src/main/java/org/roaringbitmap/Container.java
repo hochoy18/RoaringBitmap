@@ -14,7 +14,7 @@ public abstract class Container implements Iterable<Short>, Cloneable,
         Externalizable {
 
 	// if isNegated is true, we enumerate the bits that are zero
-	private boolean isNegated = false;
+	//private boolean isNegated = false;
 
         /**
          * Add a short to the container. May generate a new container.

@@ -24,7 +24,7 @@ import org.junit.Test;
  */
 @SuppressWarnings({ "static-method", "deprecation", "javadoc" })
 public class TestRoaringBitmap {
-
+        /*
         @Test
         public void ANDNOTtest() {
                 final RoaringBitmap rr = new RoaringBitmap();
@@ -1480,5 +1480,5 @@ public class TestRoaringBitmap {
                         a[pos++] = x;
                 return Arrays.equals(rr.toArray(), a);
         }
-
+        */
 }
