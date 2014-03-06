@@ -1,7 +1,7 @@
 package org.roaringbitmap;
 import java.util.*;
 
-interface MinimalCompressedBitset extends Iterable<Integer> {
+public interface MinimalCompressedBitset extends Iterable<Integer> {
         public static final int UNSET = -1;  // for universe size
         public MinimalCompressedBitset getInvokingObject();  // ugly Java workaround
         public boolean containsOp( final int x);
