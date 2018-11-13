@@ -4696,13 +4696,14 @@ public class TestRoaringBitmap {
 
   @Test
   public void testNextValue() {
+	Random r = new Random(1234);
     RoaringBitmap bitmap = RandomisedTestData.TestDataSet.testCase()
-            .withRunAt(0)
-            .withBitmapAt(1)
-            .withArrayAt(2)
-            .withRunAt(3)
-            .withBitmapAt(4)
-            .withArrayAt(5)
+            .withRunAt(0,r)
+            .withBitmapAt(1,r)
+            .withArrayAt(2,r)
+            .withRunAt(3,r)
+            .withBitmapAt(4,r)
+            .withArrayAt(5,r)
             .build();
 
     BitSet bitset = new BitSet();

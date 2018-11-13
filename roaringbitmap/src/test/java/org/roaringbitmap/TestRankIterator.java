@@ -9,6 +9,7 @@ import org.junit.runners.Parameterized;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,7 +24,8 @@ public class TestRankIterator {
   @SuppressWarnings("unchecked")
 @Parameterized.Parameters(name = "{index}: advance by {1}")
   public static Collection<Object[]> parameters() {
-    FastRankRoaringBitmap fast = getBitmap();
+	int seed = 1234;
+    FastRankRoaringBitmap fast = getBitmap(seed);
     Assert.assertTrue(fast.isCacheDismissed());
     return Lists.cartesianProduct(Collections.singletonList(fast), computeAdvances())
                 .stream().map(List::toArray).collect(Collectors.toList());
@@ -84,9 +86,11 @@ public class TestRankIterator {
             .collect(Collectors.toList());
   }
 
-  private static FastRankRoaringBitmap getBitmap() {
+  private static FastRankRoaringBitmap getBitmap(int seed) {
+	Random r = new Random(seed);
+
     FastRankRoaringBitmap bitmap = randomBitmap(50,
-            writer().fastRank().initialCapacity(50).constantMemory().get());
+            writer().fastRank().initialCapacity(50).constantMemory().get(),r);
     assertTrue(bitmap.isCacheDismissed());
     return bitmap;
   }

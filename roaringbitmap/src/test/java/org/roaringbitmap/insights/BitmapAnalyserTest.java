@@ -7,6 +7,7 @@ import org.roaringbitmap.RoaringBitmap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +25,8 @@ public class BitmapAnalyserTest {
     BitmapStatistics expected = new BitmapStatistics(new BitmapStatistics.ArrayContainersStats(1, 6), 1, 1);
     assertEquals(expected, result);
   }
+  
+  Random r = new Random(123);
 
   @Test
   public void analyseRandomBitmap() {
@@ -32,7 +35,7 @@ public class BitmapAnalyserTest {
     double bitmapFraction = 0.2;
     double denseLimit = runFraction + bitmapFraction;
     double arrayFraction = 1 - denseLimit;
-    RoaringBitmap rb = RandomisedTestData.randomBitmap(1000, runFraction, denseLimit);
+    RoaringBitmap rb = RandomisedTestData.randomBitmap(1000, runFraction, denseLimit,r);
     BitmapStatistics result = BitmapAnalyser.analyse(rb);
 
     Assert.assertEquals(runFraction, result.containerFraction(result.getRunContainerCount()), delta);
@@ -50,7 +53,7 @@ public class BitmapAnalyserTest {
     List<RoaringBitmap> bitmaps = new ArrayList<>();
     int totalBitmaps = 60;
     for (int i = 0; i < totalBitmaps; i++) {
-      RoaringBitmap rb = RandomisedTestData.randomBitmap(80, runFraction, denseLimit);
+      RoaringBitmap rb = RandomisedTestData.randomBitmap(80, runFraction, denseLimit,r);
       bitmaps.add(rb);
     }
 

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Random;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -22,6 +23,7 @@ public class TestConcatenation {
 
   @Parameterized.Parameters
   public static Object[][] params() {
+	Random r = new Random(34142);
     return new Object[][]
             {
                     // the data set reported in issue #260
@@ -30,28 +32,28 @@ public class TestConcatenation {
                     {read("src/test/resources/testdata/offset_failure_case_2.txt"), 20},
                     {read("src/test/resources/testdata/offset_failure_case_3.txt"), 20},
                     // a range of test cases with offsets being divisors of 65536
-                    {testCase().withBitmapAt(0).withRunAt(1).withArrayAt(2).build(), 1 << 16},
-                    {testCase().withRunAt(0).withBitmapAt(1).withBitmapAt(2).build(), 1 << 16},
-                    {testCase().withBitmapAt(0).withBitmapAt(1).withRunAt(2).build(), 1 << 16},
-                    {testCase().withBitmapAt(0).withRunAt(2).withArrayAt(4).build(), 1 << 16},
-                    {testCase().withRunAt(0).withBitmapAt(2).withBitmapAt(4).build(), 1 << 16},
-                    {testCase().withArrayAt(0).withBitmapAt(2).withRunAt(4).build(), 1 << 16},
+                    {testCase().withBitmapAt(0,r).withRunAt(1,r).withArrayAt(2,r).build(), 1 << 16},
+                    {testCase().withRunAt(0,r).withBitmapAt(1,r).withBitmapAt(2,r).build(), 1 << 16},
+                    {testCase().withBitmapAt(0,r).withBitmapAt(1,r).withRunAt(2,r).build(), 1 << 16},
+                    {testCase().withBitmapAt(0,r).withRunAt(2,r).withArrayAt(4,r).build(), 1 << 16},
+                    {testCase().withRunAt(0,r).withBitmapAt(2,r).withBitmapAt(4,r).build(), 1 << 16},
+                    {testCase().withArrayAt(0,r).withBitmapAt(2,r).withRunAt(4,r).build(), 1 << 16},
                     // awkward offsets
-                    {testCase().withBitmapAt(0).build(), 20},
-                    {testCase().withRunAt(0).build(), 20},
-                    {testCase().withArrayAt(0).build(), 20},
-                    {testCase().withBitmapAt(0).withRunAt(1).build(), 20},
-                    {testCase().withRunAt(0).withBitmapAt(1).build(), 20},
-                    {testCase().withArrayAt(0).withBitmapAt(1).build(), 20},
-                    {testCase().withBitmapAt(0).withRunAt(2).build(), 20},
-                    {testCase().withRunAt(0).withBitmapAt(2).build(), 20},
-                    {testCase().withArrayAt(0).withBitmapAt(2).build(), 20},
-                    {testCase().withBitmapAt(0).withRunAt(1).withArrayAt(2).build(), 20},
-                    {testCase().withRunAt(0).withBitmapAt(1).withBitmapAt(2).build(), 20},
-                    {testCase().withArrayAt(0).withBitmapAt(1).withRunAt(2).build(), 20},
-                    {testCase().withBitmapAt(0).withRunAt(2).withArrayAt(4).build(), 20},
-                    {testCase().withRunAt(0).withBitmapAt(2).withBitmapAt(4).build(), 20},
-                    {testCase().withArrayAt(0).withBitmapAt(2).withRunAt(4).build(), 20},
+                    {testCase().withBitmapAt(0,r).build(), 20},
+                    {testCase().withRunAt(0,r).build(), 20},
+                    {testCase().withArrayAt(0,r).build(), 20},
+                    {testCase().withBitmapAt(0,r).withRunAt(1,r).build(), 20},
+                    {testCase().withRunAt(0,r).withBitmapAt(1,r).build(), 20},
+                    {testCase().withArrayAt(0,r).withBitmapAt(1,r).build(), 20},
+                    {testCase().withBitmapAt(0,r).withRunAt(2,r).build(), 20},
+                    {testCase().withRunAt(0,r).withBitmapAt(2,r).build(), 20},
+                    {testCase().withArrayAt(0,r).withBitmapAt(2,r).build(), 20},
+                    {testCase().withBitmapAt(0,r).withRunAt(1,r).withArrayAt(2,r).build(), 20},
+                    {testCase().withRunAt(0,r).withBitmapAt(1,r).withBitmapAt(2,r).build(), 20},
+                    {testCase().withArrayAt(0,r).withBitmapAt(1,r).withRunAt(2,r).build(), 20},
+                    {testCase().withBitmapAt(0,r).withRunAt(2,r).withArrayAt(4,r).build(), 20},
+                    {testCase().withRunAt(0,r).withBitmapAt(2,r).withBitmapAt(4,r).build(), 20},
+                    {testCase().withArrayAt(0,r).withBitmapAt(2,r).withRunAt(4,r).build(), 20},
                     {testCase().withRange(0, 1 << 16).build(), 20}
             };
   }

@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Iterator;
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -20,6 +21,8 @@ public class Fuzzer {
   interface IntBitmapPredicate {
     boolean test(int index, RoaringBitmap bitmap);
   }
+  
+  static Random R = new Random(32321);
 
   public static <T> void verifyInvarianceArray(Function<RoaringBitmap[], T> left,
                                                Function<RoaringBitmap[], T> right) {
@@ -34,7 +37,7 @@ public class Fuzzer {
     IntStream.range(0, count)
             .parallel()
             .mapToObj(i -> IntStream.range(0, setSize)
-                    .mapToObj(j -> randomBitmap(maxKeys))
+                    .mapToObj(j -> randomBitmap(maxKeys, R))
                     .toArray(RoaringBitmap[]::new))
             .forEach(bitmap -> Assert.assertEquals(left.apply(bitmap), right.apply(bitmap)));
   }
@@ -53,7 +56,7 @@ public class Fuzzer {
     IntStream.range(0, count)
             .parallel()
             .mapToObj(i -> IntStream.range(0, setSize)
-                    .mapToObj(j -> randomBitmap(maxKeys))
+                    .mapToObj(j -> randomBitmap(maxKeys, R))
                     .collect(toList()))
             .forEach(bitmaps -> Assert.assertEquals(left.apply(bitmaps.iterator()), right.apply(bitmaps.iterator())));
   }
@@ -68,7 +71,7 @@ public class Fuzzer {
                                           Function<RoaringBitmap, T> func) {
     IntStream.range(0, count)
             .parallel()
-            .mapToObj(i -> randomBitmap(maxKeys))
+            .mapToObj(i -> randomBitmap(maxKeys, R))
             .forEach(bitmap -> Assert.assertEquals(value, func.apply(bitmap)));
   }
 
@@ -85,7 +88,7 @@ public class Fuzzer {
                                           Function<RoaringBitmap, T> right) {
     IntStream.range(0, count)
             .parallel()
-            .mapToObj(i -> randomBitmap(maxKeys))
+            .mapToObj(i -> randomBitmap(maxKeys, R))
             .filter(validity)
             .forEach(bitmap -> Assert.assertEquals(left.apply(bitmap), right.apply(bitmap)));
   }
@@ -117,8 +120,8 @@ public class Fuzzer {
     IntStream.range(0, count)
             .parallel()
             .forEach(i -> {
-              RoaringBitmap one = randomBitmap(maxKeys);
-              RoaringBitmap two = randomBitmap(maxKeys);
+              RoaringBitmap one = randomBitmap(maxKeys, R);
+              RoaringBitmap two = randomBitmap(maxKeys, R);
               if (validity.test(one, two)) {
                 Assert.assertEquals(left.apply(one, two), right.apply(one, two));
               }
@@ -140,7 +143,7 @@ public class Fuzzer {
                                       IntBitmapPredicate predicate) {
     IntStream.range(0, count)
             .parallel()
-            .mapToObj(i -> randomBitmap(maxKeys))
+            .mapToObj(i -> randomBitmap(maxKeys, R))
             .filter(validity)
             .forEach(bitmap -> {
               for (int i = 0; i < bitmap.getCardinality(); ++i) {

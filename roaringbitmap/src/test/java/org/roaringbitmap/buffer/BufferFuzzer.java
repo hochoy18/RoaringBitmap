@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.roaringbitmap.RandomisedTestData;
 
+import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -247,8 +248,10 @@ public class BufferFuzzer {
             (l, r) -> MutableRoaringBitmap.xor(l, r),
             (l, r) -> MutableRoaringBitmap.andNot(MutableRoaringBitmap.or(l, r), MutableRoaringBitmap.and(l, r)));
   }
+  
+  private static Random r = new Random(12356);
 
   private static MutableRoaringBitmap randomBitmap(int maxKeys) {
-    return RandomisedTestData.randomBitmap(maxKeys).toMutableRoaringBitmap();
+    return RandomisedTestData.randomBitmap(maxKeys, r).toMutableRoaringBitmap();
   }
 }

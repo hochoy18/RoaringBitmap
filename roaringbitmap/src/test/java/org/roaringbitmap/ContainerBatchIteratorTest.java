@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import static java.util.Arrays.copyOfRange;
@@ -17,6 +17,7 @@ public class ContainerBatchIteratorTest {
 
     @Parameterized.Parameters
     public static Object[][] params() {
+    	Random r = new Random(4242);
         return new Object[][] {
                 {IntStream.range(0, 20000).toArray()},
                 {IntStream.range(0, 1 << 16).toArray()},
@@ -42,51 +43,51 @@ public class ContainerBatchIteratorTest {
                 {IntStream.range(0, 1 << 16).filter(i -> (i % 271) == 0).toArray()},
                 {IntStream.range(0, 1 << 16).filter(i -> (i % 1000) == 0).toArray()},
                 {IntStream.empty().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.sparseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.denseRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
-                {RandomisedTestData.rleRegion().toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.sparseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.denseRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
+                {RandomisedTestData.rleRegion(r).toArray()},
         };
     }
 
@@ -130,8 +131,10 @@ public class ContainerBatchIteratorTest {
 
     @Test
     public void shouldRecoverValuesRandomBatchSizes() {
+        int seedvalue = 1234;
+        Random r = new Random(seedvalue);
         IntStream.range(0, 100)
-                .forEach(i -> test(ThreadLocalRandom.current().nextInt(1, 65536)));
+                .forEach(i -> test(r.nextInt(65536 - 1) + 1));
     }
 
 
